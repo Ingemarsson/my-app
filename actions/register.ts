@@ -1,11 +1,12 @@
 "use server";
 
 import * as z from "zod";
-import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -32,5 +33,9 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
   const verificationToken = await generateVerificationToken(email);
 
-  return { success: "Регистрация успешна!" };
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
+  return {
+    success: "Подтвердите ваш email. Письмо выслано на указанную почту!",
+  };
 };

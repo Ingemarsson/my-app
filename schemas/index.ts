@@ -1,5 +1,15 @@
 import * as z from "zod";
 
+export const NewPasswordSchema = z.object({
+  password: z.string().min(6, {
+    message: "Пароль должен содержать минимум 6 символов",
+  }),
+});
+
+export const ResetSchema = z.object({
+  email: z.string().email({ message: "Неверно указан email" }),
+});
+
 export const LoginSchema = z.object({
   email: z.string().email({ message: "Неверно указан email" }),
   password: z.string().min(1, {

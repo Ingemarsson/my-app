@@ -9,7 +9,10 @@ import { sendVerificationEmail } from "@/lib/mail";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { generateVerificationToken } from "@/lib/tokens";
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string
+) => {
   const validatedFields = LoginSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Invalid fields" };
@@ -35,18 +38,11 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   try {
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
-
-    if (!result || result?.error) {
-      console.error("SignIn Error:", result?.error);
-      return { error: "Нет пользователя!" };
-    }
-
-    return { success: true };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

@@ -19,8 +19,11 @@ import FormError from "@/components/form-error";
 import FormSuccess from "@/components/form-success";
 import { login } from "@/actions/login";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-export default function LoginForm() {
+const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -36,7 +39,7 @@ export default function LoginForm() {
     setError("");
     setSuccess("");
     startTransition(() => {
-      login(values).then((data) => {
+      login(values, callbackUrl || undefined).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
       });
@@ -106,4 +109,6 @@ export default function LoginForm() {
       </Form>
     </CardWrapper>
   );
-}
+};
+
+export default LoginForm;

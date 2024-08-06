@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { UserRole } from "@prisma/client";
 
-const AdminPage = async () => {
+const AdminPage = () => {
   const onAPIRouteClick = () => {
     fetch("/api/admin").then((response) => {
       if (response.ok) {
@@ -38,4 +38,5 @@ const AdminPage = async () => {
     </Card>
   );
 };
+
 export default AdminPage;

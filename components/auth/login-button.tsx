@@ -5,7 +5,7 @@ import LoginForm from "./login-form";
 
 interface LoginButtonProps {
   children: React.ReactNode;
-  mode?: "modal" | "redirect";
+  mode?: "redirect";
   asChild?: boolean;
 }
 
